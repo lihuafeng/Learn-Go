@@ -23,7 +23,7 @@ func toDay(day time.Weekday)  int{
 	case today+6:
 		return 6
 	default:
-		return 0
+		return 0 
 	}
 }
 func main() {
