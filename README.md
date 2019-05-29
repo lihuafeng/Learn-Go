@@ -82,3 +82,26 @@ func main() {
 	Fn(me)
 }
 ```
+
+
+
+设计模式
+---
+
+* 装箱者模式
+
+
+* 单例模式
+
+Go可以使用sync.Once包很优雅的实现单例
+
+```
+// The zero value for Once is ready to use
+var oSingle sync.Once
+var single *myType
+
+func getSingle() *myType {
+	oSingle.Do(func(){ single = newMyType() })
+	return single
+}
+```
