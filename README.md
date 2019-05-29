@@ -105,3 +105,9 @@ func getSingle() *myType {
 	return single
 }
 ```
+
+上面的实现方式有以下优点：
+1. 无论调用多少次Do，都只会调用一次newMyType()
+2. getSingle调用非常高效
+
+    使用装饰模式和单例模式，再配合sync.Once你可以巧妙且方便地将一个不线程安全的API转换成安全的API。
