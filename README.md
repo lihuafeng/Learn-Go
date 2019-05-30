@@ -25,6 +25,24 @@ defer用法
 * defer函数的执行顺序
 
 	被defer的函数会被放入一个栈中，所以是先进后出的执行顺序。而被defer的函数在函数reture之后执行。
+	
+* 执行recover
+
+	被 defer 的函数在 return 之后执行，这个时机点正好可以捕获函数抛出的 panic，因而defer 的另一个重要用途就是执行 recover ，而 recover 也只有在 defer 中才会起作用。
+	
+	```
+	//recover 要放在 panic 点的前面，一般放在函数的起始的位置就可以了
+	func test() {
+	    defer func() {
+		if ok := recover(); ok != nil {
+		    fmt.Println("recover")
+		}
+	    }()
+	    panic("error")
+	}
+	```
+	
+	
 
 for range用法
 ---
