@@ -41,6 +41,7 @@ defer用法
 	    panic("error")
 	}
 	```
+* defer与return的关系
 	
 	
 
