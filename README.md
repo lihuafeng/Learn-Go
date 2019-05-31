@@ -42,7 +42,112 @@ defer用法
 	}
 	```
 * defer与return的关系
+
+	也就是说 return 语句不是原子操作，它被拆成了两步
+	rval = xxx // 返回值赋值给rval
+	ret // 函数返回
+	而 defer 语句就是在这两条语句之间执行，也就是
+	rval = xxx // 返回值赋值给rval
+	defer_func  // 执行defer函数
+	ret // 函数返回
 	
+实例：
+```
+func f1() {
+    for i := 0; i < 5; i++ {
+        defer fmt.Println(i)
+    }
+}
+// 因为defer的调用是先进后出的顺序
+// 所以输出：5, 4, 3, 2, 1
+
+
+func f2() {
+    for i := 0; i < 5; i++ {
+    	defer func() {
+    	    fmt.Println(i)
+    	}()
+    }
+}
+// 上面说到，i是一个闭包引用
+// 所以当执行defer时，i已经是5了
+// 所以输出：5，5，5，5，5
+
+
+func f3() {
+    for i := 0; i < 5; i++ {
+    	defer func(n int) {
+    	    fmt.Println(n)
+    	}(i)
+    }
+}
+// Go的函数参数是值拷贝，所以这是普通的函数传值
+// 所以输出：5，4，3，2，1
+
+
+func f4() int {
+    t := 5
+    defer func() {
+    	t++
+    }()
+    return t
+}
+// 注意：f4函数的返回值是没有声明变量的
+// 所以t虽然是闭包引用，但返回值rval不是闭包引用
+// 可以拆解为
+// rval = t
+// t++
+// return rval
+// 所以输出是5
+
+
+func f5() (r int) {
+    defer func() {
+        r++
+    }()
+    return 0
+}
+// 注意：f5函数的返回值是有声明变量的
+// 所以返回值r是闭包引用
+// 可以拆解为
+// r = 0
+// rval = r
+// r++
+// return rval
+// 所以输出：1
+
+
+func f6() (r int) {
+    t := 5
+    defer func() {
+    	t = t + 5
+    }()
+    return t
+}
+// 这里t虽然是闭包引用，但返回值r不是闭包引用
+// 可以拆解为
+// r = t
+// rval = r
+// t = t + 5
+// return rval
+// 所以输出：5
+
+
+func f7() (r int) {
+    defer func(r int) {
+	r = r + 5
+    }(r)
+    return 1
+}
+// 因为匿名函数的参数也是r，所以相当于是
+// 匿名函数的参数r = r + 5，不影响外部
+// 所以输出：1
+```
+	
+小结：
+
+1. 谨记defer和return执行的顺序
+2. 注意返回值是否为闭包引用
 	
 
 for range用法
