@@ -1,6 +1,9 @@
 # Learn-Go
 Go语言笔记
 
+#### 依赖管理工具--[govendor](https://github.com/kardianos/govendor)
+
+似PHP的composer,Python的pip
 
 
 go内置的数据结构
