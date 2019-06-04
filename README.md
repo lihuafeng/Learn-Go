@@ -14,6 +14,44 @@ go内置的数据结构
 |channel	|指向一个struct|
 
 
+Slice用法
+---
+
+slice的底层：
+```
+type slice struct {
+	array unsafe.Pointer
+	len   int
+	cap   int
+}
+```
+
+slice的底层结构由一个指向数组的指针ptr和长度len，容量cap构成，也就是说slice的数据存在数组当中。
+
+slice的重要知识点
+1. slice的底层是数组指针。
+2. 当append后，slice长度不超过容量cap，新增的元素将直接加在数组中。
+3. 当append后，slice长度超过容量cap，将会返回一个新的slice。
+
+实例：
+```
+func main() {
+    s := []int{1, 2, 3} // len=3, cap=3
+    a := s
+    s[0] = 888
+    s = append(s, 4)
+
+    fmt.Println(a, len(a), cap(a)) // 输出：[888 2 3] 3 3
+    fmt.Println(s, len(s), cap(s)) // 输出：[888 2 3 4] 4 6
+}
+因为slice的底层是数组指针，所以slice a和s指向的是同一个底层数组，所以当修改s[0]时，a也会被修改。
+当s进行append时，因为长度len和容量cap是int值类型，所以不会影响到a。
+```
+总结
+1. 谨记slice的底层结构是指针数组，并且len和cap是值类型。
+2. 使用cap观察append后是否分配了新的数组。
+3. Go的函数传参都是值拷贝传递。
+
 
 defer用法
 ---
