@@ -286,3 +286,35 @@ func getSingle() *myType {
 2. getSingle调用非常高效
 
     使用装饰模式和单例模式，再配合sync.Once你可以巧妙且方便地将一个不线程安全的API转换成安全的API。
+    
+    
+    
+包
+----
+
+
+##### flag
+flag包实现了命令行参数的解析
+
+定义flags有两种方式：
+1. flag.Xxx() 其中 Xxx 可以是 Int、String，Bool 等；返回一个相应类型的指针
+	```
+	var ip = flag.Int("flagname", 1234, "help message for flagname")
+	```
+	* 第一个参数 ：flag名称为flagname
+	* 第二个参数 ：flagname默认值为1234
+	* 第三个参数 ：flagname的提示信息
+	
+	返回的ip是指针类型，所以这种方式获取ip的值应该fmt.Println(*ip)
+2. flag.XxxVar()  将 flag 绑定到一个变量上
+	```
+	var flagValue int
+	flag.IntVar(&flagValue, "flagname", 1234, "help message for flagname")
+	```
+	
+	* 第一个参数 ：接收flagname的实际值的
+	* 第二个参数 ：flag名称为flagname
+	* 第三个参数 ：flagname默认值为1234
+	* 第四个参数 ：flagname的提示信息
+这种方式获取ip的值fmt.Println(ip)就可以了
+    
